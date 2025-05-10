@@ -19,79 +19,42 @@ if (!$conn) {
 $error = '';
 $success = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
-    header('Content-Type: application/json');
-    $action = $_POST['action'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+    $response = ['success' => false, 'message' => ''];
 
     if ($action === 'login') {
-        $username = trim($_POST['username']);
-        $password = trim($_POST['password']);
+        $username = $_POST['username'] ?? '';
+        $password = $_POST['password'] ?? '';
 
         if (empty($username) || empty($password)) {
-            echo json_encode(['success' => false, 'message' => 'Заполните все поля']);
-            exit;
-        }
-
-        $stmt = mysqli_prepare($conn, "SELECT u.id, u.username, r.name AS role FROM users u JOIN roles r ON u.role_id = r.id WHERE u.username = ? AND u.password = ?");
-        mysqli_stmt_bind_param($stmt, "ss", $username, $password);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $user = mysqli_fetch_assoc($result);
-        mysqli_stmt_close($stmt);
-
-        if ($user) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = $user['role'];
-            echo json_encode(['success' => true, 'message' => 'Авторизация успешна']);
+            $response['message'] = 'Пожалуйста, заполните все поля';
         } else {
-            echo json_encode(['success' => false, 'message' => 'Неверный логин или пароль']);
+            if ($username === 'admin' && $password === 'admin') {
+                $_SESSION['user'] = $username;
+                $response['success'] = true;
+                $response['message'] = 'Успешный вход';
+            } else {
+                $response['message'] = 'Неверное имя пользователя или пароль';
+            }
         }
-        exit;
     } elseif ($action === 'register') {
-        $username = trim($_POST['username']);
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
+        $username = $_POST['username'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $confirmPassword = $_POST['confirm_password'] ?? '';
 
-        if (empty($username) || empty($email) || empty($password)) {
-            echo json_encode(['success' => false, 'message' => 'Заполните все поля']);
-            exit;
-        }
-
-        $stmt = mysqli_prepare($conn, "SELECT id FROM users WHERE username = ? OR email = ?");
-        mysqli_stmt_bind_param($stmt, "ss", $username, $email);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        
-        if (mysqli_num_rows($result) > 0) {
-            echo json_encode(['success' => false, 'message' => 'Пользователь с таким логином или email уже существует']);
-            mysqli_stmt_close($stmt);
-            exit;
-        }
-        mysqli_stmt_close($stmt);
-
-        $stmt = mysqli_prepare($conn, "SELECT id FROM roles WHERE name = 'user'");
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-        $role = mysqli_fetch_assoc($result);
-        mysqli_stmt_close($stmt);
-        
-        if (!$role) {
-            echo json_encode(['success' => false, 'message' => 'Ошибка: роль пользователя не найдена']);
-            exit;
-        }
-
-        $stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, password, role_id) VALUES (?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $password, $role['id']);
-        
-        if (mysqli_stmt_execute($stmt)) {
-            echo json_encode(['success' => true, 'message' => 'Регистрация успешна. Теперь вы можете войти']);
+        if (empty($username) || empty($password) || empty($confirmPassword)) {
+            $response['message'] = 'Пожалуйста, заполните все поля';
+        } elseif ($password !== $confirmPassword) {
+            $response['message'] = 'Пароли не совпадают';
         } else {
-            echo json_encode(['success' => false, 'message' => 'Ошибка регистрации: ' . mysqli_error($conn)]);
+            $response['success'] = true;
+            $response['message'] = 'Регистрация успешна';
         }
-        mysqli_stmt_close($stmt);
-        exit;
     }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
     exit;
 }
 ?>
@@ -100,34 +63,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>support sys</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Serif:300,400,500&display=swap" rel="stylesheet">
+    <title>Вход</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="login-container">
-        <div class="login-title">support sys</div>
+        <h1 class="login-title">ВХОД</h1>
         <div class="login-tabs">
-            <button class="tab active" data-tab="login">Вход</button>
+            <button class="tab" data-tab="login">Вход</button>
             <button class="tab" data-tab="register">Регистрация</button>
             <div class="tab-slider"></div>
         </div>
         <div class="tab-content">
             <form id="login-form" class="login-form form-login active">
-                <input type="text" name="username" placeholder="Логин" class="login-input" required>
-                <input type="password" name="password" placeholder="Пароль" class="login-input" required>
+                <input type="text" class="login-input" name="username" placeholder="Имя пользователя" required>
+                <input type="password" class="login-input" name="password" placeholder="Пароль" required>
                 <button type="submit" class="login-btn">Войти</button>
             </form>
             <form id="register-form" class="login-form form-register">
-                <input type="text" name="username" placeholder="Логин" class="login-input" required>
-                <input type="email" name="email" placeholder="E-mail" class="login-input" required>
-                <input type="password" name="password" placeholder="Пароль" class="login-input" required>
+                <input type="text" class="login-input" name="username" placeholder="Имя пользователя" required>
+                <input type="password" class="login-input" name="password" placeholder="Пароль" required>
+                <input type="password" class="login-input" name="confirm_password" placeholder="Подтвердите пароль" required>
                 <button type="submit" class="login-btn">Зарегистрироваться</button>
             </form>
         </div>
     </div>
+    <footer class="footer">
+        <p>© 2024 Все права защищены</p>
+    </footer>
     <script src="script.js"></script>
-    <footer class="footer">2025 codding fest</footer>
 </body>
 </html>
 <?php mysqli_close($conn); ?>

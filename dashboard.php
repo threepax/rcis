@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role'])) {
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
 
-// Подключение к базе данных через mysqli
 $host = 'localhost';
 $dbname = 'u3100249_data';
 $username = 'u3100249_admin';
@@ -19,7 +18,6 @@ if (!$conn) {
     die("Ошибка подключения: " . mysqli_connect_error());
 }
 
-// Fetch user data
 $stmt = mysqli_prepare($conn, "SELECT username FROM users WHERE id = ?");
 mysqli_stmt_bind_param($stmt, "i", $user_id);
 mysqli_stmt_execute($stmt);
@@ -28,7 +26,6 @@ $user = mysqli_fetch_assoc($result);
 $username = $user['username'];
 mysqli_stmt_close($stmt);
 
-// Fetch requests based on role
 $requests = [];
 $status_map = [
     'pending' => 'Ожидает',
@@ -59,7 +56,6 @@ if ($role === 'user') {
     }
 }
 
-// Получение списка пользователей для админа (AJAX-поиск)
 if ($role === 'admin' && isset($_GET['search_user'])) {
     $search = '%' . mysqli_real_escape_string($conn, $_GET['search_user']) . '%';
     $users = [];
@@ -74,7 +70,6 @@ if ($role === 'admin' && isset($_GET['search_user'])) {
     exit;
 }
 
-// Handle AJAX requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     header('Content-Type: application/json');
     $action = $_POST['action'];
@@ -245,7 +240,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     </main>
     <footer class="footer">2025 codding fest</footer>
     <script>
-        // Helper function to show notification
         function showNotification(message, type) {
             const container = document.querySelector('.notification-container');
             const existing = container.querySelector('.notification');
@@ -262,7 +256,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             }, 3000);
         }
 
-        // Helper function to set loading state
         function setLoading(element, isLoading) {
             if (isLoading) {
                 element.disabled = true;
@@ -273,7 +266,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             }
         }
 
-        // Delete request (for users)
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', async () => {
                 const requestId = button.getAttribute('data-id');
@@ -310,7 +302,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             });
         });
 
-        // Update status (for admins)
         document.querySelectorAll('.status-select').forEach(select => {
             select.addEventListener('change', async () => {
                 const requestId = select.getAttribute('data-id');
@@ -344,7 +335,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             });
         });
 
-        // Create request (for users)
         const createForm = document.getElementById('create-request-form');
         if (createForm) {
             createForm.addEventListener('submit', async (e) => {
@@ -385,7 +375,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             });
         }
 
-        // Animate ticket items on load
         document.querySelectorAll('.ticket-item').forEach((item, index) => {
             item.style.opacity = '0';
             item.style.transform = 'translateY(20px)';
@@ -396,7 +385,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             }, index * 100);
         });
 
-        // Admin: автокомплит поиска пользователей
         const userSearchInput = document.getElementById('user-search-input');
         const userAutocompleteList = document.getElementById('user-autocomplete-list');
         const userDetailsBlock = document.getElementById('user-details-block');
@@ -416,7 +404,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                         return;
                     }
                     
-                    // Создаем список автокомплита
                     const list = document.createElement('div');
                     list.className = 'autocomplete-list';
                     
@@ -440,7 +427,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 }
             });
             
-            // Скрывать автокомплит при потере фокуса
             userSearchInput.addEventListener('blur', function() {
                 setTimeout(() => { userAutocompleteList.innerHTML = ''; }, 150);
             });

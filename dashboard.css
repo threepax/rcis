@@ -642,7 +642,7 @@ body {
     }
 }
 
-/* Стили для высоких экранов (планшеты в портретной ориентации) */
+
 @media (min-height: 1000px) and (min-width: 768px) {
     .dashboard-main {
         min-height: calc(100vh - 150px);
@@ -652,7 +652,6 @@ body {
     }
 }
 
-/* Стили для маленьких экранов с высоким DPI */
 @media (max-width: 400px) and (-webkit-min-device-pixel-ratio: 2), 
        (max-width: 400px) and (min-resolution: 192dpi) {
     body {
@@ -670,7 +669,6 @@ body {
     }
 }
 
-/* Поддержка ландшафтной ориентации на мобильных устройствах */
 @media (max-height: 500px) and (orientation: landscape) {
     .dashboard-wrapper {
         margin: 12px auto;
@@ -684,7 +682,6 @@ body {
     }
 }
 
-/* Центрирование блока жалоб у администратора */
 body .dashboard-two-cols .dashboard-col-center {
     display: flex;
     flex-direction: column;
@@ -719,7 +716,7 @@ body .dashboard-two-cols .dashboard-col-center {
     min-width: 100px;
 }
 
-/* Стили для автокомплита и управления пользователями */
+
 #user-search-input {
     width: 100%;
     margin-bottom: 16px;
@@ -770,7 +767,6 @@ body .dashboard-two-cols .dashboard-col-center {
     background: #ff3333 !important;
 }
 
-/* Стили для автокомплита */
 .autocomplete-list {
     position: absolute;
     background: #232323;
@@ -797,7 +793,6 @@ body .dashboard-two-cols .dashboard-col-center {
     color: #ff3333;
 }
 
-/* Стили для флекс-контейнера кнопок */
 .button-container {
     display: flex;
     gap: 16px;
@@ -806,7 +801,6 @@ body .dashboard-two-cols .dashboard-col-center {
     flex-wrap: wrap;
 }
 
-/* Дополнительные стили для админ-панели */
 #admin-users-block {
     min-height: 200px;
     max-height: 600px;
@@ -850,7 +844,7 @@ body .dashboard-two-cols .dashboard-col-center {
     }
 }
 
-/* Оптимизация для широкоформатных мониторов */
+
 @media (min-width: 1800px) {
     .dashboard-wrapper {
         max-width: 1600px;
@@ -872,7 +866,7 @@ body .dashboard-two-cols .dashboard-col-center {
     }
 }
 
-/* Оптимизация для устройств с соотношением сторон 16:9 в ландшафтной ориентации */
+
 @media (min-aspect-ratio: 16/9) and (max-height: 900px) {
     .dashboard-wrapper {
         margin: 20px auto;
@@ -883,7 +877,6 @@ body .dashboard-two-cols .dashboard-col-center {
     }
 }
 
-/* Стили для Touch-устройств */
 @media (hover: none) {
     .delete-btn:active, .submit-btn:active {
         transform: scale(0.98);
