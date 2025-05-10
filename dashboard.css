@@ -1,0 +1,899 @@
+:root {
+    --main-font: 'Roboto Serif', serif;
+    --main-color: #111;
+    --main-bg: #fff;
+    --accent: #ff3333;
+    --border: #ddd;
+    --input-bg: #fff;
+    --input-radius: 8px;
+    --block-radius: 12px;
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    --transition: 0.3s ease;
+    --status-pending: #ffb300;
+    --status-in_progress: #1e88e5;
+    --status-resolved: #43a047;
+    --status-closed: #757575;
+    --button-padding: 12px 20px;
+    --input-padding: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--main-font);
+    font-weight: 300;
+    font-size: 20px;
+    letter-spacing: 0.15em;
+    background: #fff;
+    color: var(--main-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-content, .header-user, .profile-username, .logout-btn, .header-title {
+    font-family: var(--main-font) !important;
+    font-weight: 300 !important;
+    font-size: 20px !important;
+    letter-spacing: 0.15em !important;
+    color: #111 !important;
+    line-height: 1.2 !important;
+    background: none !important;
+    box-shadow: none !important;
+}
+
+.header-user {
+    gap: 18px;
+}
+
+.profile-username {
+    color: #ff3333 !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+}
+
+.admin .profile-username {
+    text-decoration: underline wavy #ff3333 1.5px !important;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform var(--transition);
+    padding: 0 8px;
+}
+
+.logout-btn:hover svg path {
+    stroke: var(--accent);
+}
+
+.logout-btn:hover {
+    transform: scale(1.07);
+}
+
+.dashboard-main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: linear-gradient(120deg, #f8fafc 0%, #e8eaf6 100%);
+}
+
+.dashboard-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+    justify-items: center;
+    padding: 32px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(60,60,120,0.10), 0 1.5px 6px rgba(0,0,0,0.04);
+    margin: 32px auto;
+    max-width: 1200px;
+    width: calc(100% - 64px);
+}
+
+.dashboard-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.dashboard-col:not(:last-child) {
+    border-right: 2px solid var(--border);
+}
+
+.col-title {
+    margin: 0 0 28px 0;
+    user-select: none;
+    text-align: center;
+    width: 100%;
+    font-size: 26px;
+    color: #222;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+}
+
+.tickets-block, .form-block {
+    background: #222 !important;
+    color: #fff !important;
+    border-radius: var(--block-radius);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    padding: 30px;
+    min-width: 340px;
+    max-width: 500px;
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 0;
+    transition: box-shadow 0.3s, background 0.3s;
+}
+
+.tickets-block:hover, .form-block:hover {
+    box-shadow: 0 8px 32px rgba(60,60,120,0.18);
+    background: #181818 !important;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 32px;
+    width: 100%;
+}
+
+.form-block label {
+    font-size: 20px !important;
+    left: 32px;
+    top: 18px;
+    color: #fff !important;
+    background: transparent;
+    letter-spacing: 0.15em !important;
+    pointer-events: none;
+    opacity: 1;
+    z-index: 2;
+    text-align: left;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.form-block input:focus + label,
+.form-block input:not(:placeholder-shown) + label,
+.form-block textarea:focus + label,
+.form-block textarea:not(:placeholder-shown) + label {
+    transform: translateX(-60%) scale(0.9);
+    opacity: 0.7;
+}
+
+.animated-input::placeholder {
+    color: #ccc !important;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+.animated-input:focus::placeholder,
+.animated-input:not(:placeholder-shown)::placeholder {
+    opacity: 0;
+}
+
+.form-block input,
+.form-block textarea {
+    font-size: 18px !important;
+    font-family: var(--main-font) !important;
+    font-weight: 300 !important;
+    letter-spacing: 0.15em !important;
+    width: 100%;
+    border-radius: var(--input-radius);
+    border: none;
+    padding: var(--input-padding);
+    background: var(--input-bg);
+    color: #111;
+    box-sizing: border-box;
+    resize: vertical;
+    margin-bottom: 0;
+    z-index: 1;
+    text-align: center;
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.form-block input:focus,
+.form-block textarea:focus {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.form-block textarea {
+    min-height: 120px;
+    max-height: 300px;
+}
+
+.delete-btn, .submit-btn {
+    border-radius: var(--input-radius);
+    font-size: 16px !important;
+    background: linear-gradient(90deg, #ff3333 0%, #ff6f61 100%);
+    color: #fff;
+    padding: var(--button-padding);
+    box-shadow: 0 2px 8px rgba(255,51,51,0.08);
+    border: none;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.delete-btn:hover, .submit-btn:hover {
+    background: linear-gradient(90deg, #fff 0%, #ffb3b3 100%);
+    color: #ff3333 !important;
+    box-shadow: 0 6px 16px rgba(255,51,51,0.15);
+    border: 1px solid #ff3333;
+    transform: scale(1.06);
+}
+
+.delete-btn.loading, .submit-btn.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ticket-item {
+    background: #181818 !important;
+    border-radius: var(--input-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+
+.ticket-item:hover {
+    box-shadow: 0 6px 18px rgba(60,60,120,0.13);
+    background: #232323 !important;
+}
+
+.ticket-item.no-tickets {
+    background: transparent !important;
+    box-shadow: none;
+    color: #888 !important;
+}
+
+.ticket-item.fade-out {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.ticket-title, .ticket-desc, .ticket-status, .ticket-date, .ticket-user {
+    color: #fff !important;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.ticket-title {
+    font-size: 22px;
+    font-weight: 400;
+}
+
+.ticket-desc {
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+.ticket-status, .ticket-date, .ticket-user {
+    font-size: 16px;
+}
+
+.ticket-status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    display: inline-block;
+    font-weight: 400;
+}
+
+.status-pending {
+    background: var(--status-pending);
+    color: #fff !important;
+}
+
+.status-in_progress {
+    background: var(--status-in_progress);
+    color: #fff !important;
+}
+
+.status-resolved {
+    background: var(--status-resolved);
+    color: #fff !important;
+}
+
+.status-closed {
+    background: var(--status-closed);
+    color: #fff !important;
+}
+
+.status-select {
+    border-radius: 8px;
+    background: #fff;
+    color: #222;
+    border: 1px solid #eee;
+    font-size: 16px;
+    padding: 7px 12px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.status-select:focus {
+    border: 1.5px solid #ff3333;
+    box-shadow: 0 2px 8px rgba(255,51,51,0.08);
+}
+
+.status-select.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.footer {
+    width: 100%;
+    background: var(--main-bg);
+    color: var(--main-color);
+    text-align: center;
+    font-family: var(--main-font);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    padding: 10px 0 8px 0;
+    margin-top: 0;
+    border-top: none;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.main-header {
+    width: 100%;
+    background: var(--main-bg);
+    padding: 32px 0;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+    position: relative;
+}
+
+.header-user, .header-title, .header-empty {
+    height: 48px;
+    display: flex;
+    align-items: center;
+}
+
+.header-title {
+    text-align: center;
+    width: max-content;
+    pointer-events: none;
+    justify-content: center;
+}
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.notification {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    box-shadow: var(--shadow);
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notification-success {
+    background: #e6ffe6;
+    color: #2e7d32;
+    border: 1px solid rgba(46, 125, 50, 0.2);
+}
+
+.notification-error {
+    background: #ffe6e6;
+    color: #d32f2f;
+    border: 1px solid rgba(211, 47, 47, 0.2);
+}
+
+.notification.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+@media (max-width: 1300px) {
+    .dashboard-wrapper {
+        width: calc(100% - 48px);
+        padding: 28px;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .dashboard-wrapper {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 24px;
+        width: calc(100% - 40px);
+    }
+    .tickets-block, .form-block {
+        min-width: 0;
+        max-width: 100%;
+        padding: 24px;
+    }
+    .col-title {
+        font-size: 22px;
+    }
+    body {
+        font-size: 18px;
+    }
+    .header-content, .header-user, .profile-username, .logout-btn, .header-title {
+        font-size: 18px !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .dashboard-wrapper {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        margin: 24px auto;
+    }
+    .dashboard-col {
+        border-right: none !important;
+        padding-top: 0;
+        max-width: 600px;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .dashboard-col:not(:first-child) {
+        padding-top: 25px;
+    }
+    .col-title {
+        margin-bottom: 16px;
+        font-size: 22px;
+    }
+    .tickets-block, .form-block {
+        margin: 0 auto;
+        width: 100%;
+    }
+    .main-header {
+        padding: 24px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-wrapper {
+        margin: 16px auto;
+        padding: 20px;
+        width: calc(100% - 32px);
+        border-radius: 14px;
+    }
+    .tickets-block, .form-block {
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .col-title {
+        font-size: 20px;
+        margin-bottom: 14px;
+    }
+    .ticket-item {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    .button-container {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+    .admin-change-password, .admin-block-user {
+        min-width: 200px;
+    }
+    body {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .main-header {
+        padding: 16px 0;
+    }
+    .header-content {
+        padding: 0 16px;
+        height: 40px;
+    }
+    .header-user, .header-title {
+        font-size: 16px !important;
+        height: 40px;
+    }
+    .logout-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+    .col-title {
+        font-size: 18px;
+        letter-spacing: 0.1em;
+    }
+    .dashboard-wrapper {
+        gap: 20px;
+        padding: 16px;
+        width: calc(100% - 24px);
+        border-radius: 10px;
+    }
+    .tickets-block, .form-block {
+        padding: 16px;
+        border-radius: 8px;
+    }
+    .ticket-item {
+        padding: 14px;
+        margin-bottom: 14px;
+        border-radius: 8px;
+    }
+    .ticket-title {
+        font-size: 18px;
+    }
+    .ticket-desc {
+        font-size: 15px;
+    }
+    .ticket-status, .ticket-date, .ticket-user {
+        font-size: 13px;
+    }
+    .delete-btn, .submit-btn {
+        padding: 10px 16px;
+        font-size: 15px !important;
+    }
+    .form-block label {
+        font-size: 16px !important;
+    }
+    .form-block input, .form-block textarea {
+        font-size: 15px !important;
+        padding: 14px;
+    }
+    .admin-password-input {
+        padding: 10px 14px;
+    }
+    #user-search-input {
+        padding: 10px 14px;
+    }
+    .footer {
+        font-size: 13px;
+        padding: 8px 0;
+    }
+    .admin-user-title {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content {
+        padding: 0 12px;
+    }
+    .header-user, .header-title {
+        font-size: 14px !important;
+    }
+    .profile-username {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .dashboard-wrapper {
+        padding: 12px;
+        width: calc(100% - 16px);
+        margin: 12px auto;
+        border-radius: 8px;
+    }
+    .tickets-block, .form-block {
+        padding: 14px;
+    }
+    .ticket-item {
+        padding: 12px;
+    }
+    .ticket-title {
+        font-size: 16px;
+    }
+    .ticket-desc {
+        font-size: 14px;
+    }
+    .ticket-status, .ticket-date, .ticket-user {
+        font-size: 12px;
+    }
+    .status-select {
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+    .delete-btn, .submit-btn, .admin-delete, .admin-change-password, .admin-block-user {
+        padding: 8px 12px;
+        font-size: 14px !important;
+        min-width: auto;
+    }
+    .notification {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 380px) {
+    .header-user, .header-title {
+        font-size: 13px !important;
+    }
+    .header-user {
+        gap: 10px;
+    }
+    .logout-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+    .profile-username {
+        max-width: 100px;
+    }
+    .ticket-title {
+        font-size: 15px;
+    }
+    .ticket-desc {
+        font-size: 13px;
+    }
+}
+
+/* Стили для высоких экранов (планшеты в портретной ориентации) */
+@media (min-height: 1000px) and (min-width: 768px) {
+    .dashboard-main {
+        min-height: calc(100vh - 150px);
+    }
+    .dashboard-wrapper {
+        margin: 40px auto;
+    }
+}
+
+/* Стили для маленьких экранов с высоким DPI */
+@media (max-width: 400px) and (-webkit-min-device-pixel-ratio: 2), 
+       (max-width: 400px) and (min-resolution: 192dpi) {
+    body {
+        font-size: 15px;
+    }
+    .ticket-item {
+        padding: 10px;
+    }
+    .ticket-title {
+        font-size: 14px;
+    }
+    .delete-btn, .submit-btn {
+        padding: 8px 10px;
+        font-size: 13px !important;
+    }
+}
+
+/* Поддержка ландшафтной ориентации на мобильных устройствах */
+@media (max-height: 500px) and (orientation: landscape) {
+    .dashboard-wrapper {
+        margin: 12px auto;
+    }
+    .tickets-block, .form-block {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    .main-header {
+        padding: 10px 0;
+    }
+}
+
+/* Центрирование блока жалоб у администратора */
+body .dashboard-two-cols .dashboard-col-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.tickets-block {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.delete-btn {
+    width: auto;
+    font-size: 16px !important;
+    padding: 12px 20px;
+    min-width: 120px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.admin .delete-btn {
+    width: auto !important;
+    font-size: 16px !important;
+    padding: 10px 16px !important;
+    min-width: 100px;
+}
+
+.admin-delete {
+    width: auto !important;
+    font-size: 16px !important;
+    padding: 10px 16px !important;
+    min-width: 100px;
+}
+
+/* Стили для автокомплита и управления пользователями */
+#user-search-input {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: var(--input-radius);
+    border: none;
+    box-sizing: border-box;
+}
+
+#user-autocomplete-list {
+    position: relative;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+#user-details-block {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.admin-user-form {
+    padding: 20px;
+    background: #232323;
+    border-radius: var(--input-radius);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Стили кнопок в админ-панели */
+.admin-change-password,
+.admin-block-user {
+    width: auto !important;
+    font-size: 16px !important;
+    padding: 10px 16px !important;
+    min-width: 160px;
+    text-align: center;
+}
+
+.admin-change-password {
+    background: #ff6f61 !important;
+}
+
+.admin-block-user.blocked {
+    background: #43a047 !important;
+}
+
+.admin-block-user {
+    background: #ff3333 !important;
+}
+
+/* Стили для автокомплита */
+.autocomplete-list {
+    position: absolute;
+    background: #232323;
+    border-radius: var(--input-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    width: 100%;
+    z-index: 10;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.autocomplete-item {
+    cursor: pointer;
+    padding: 10px 16px;
+    color: #fff;
+    transition: background 0.2s;
+}
+
+.autocomplete-item:hover {
+    background: #333;
+}
+
+.autocomplete-item.blocked {
+    color: #ff3333;
+}
+
+/* Стили для флекс-контейнера кнопок */
+.button-container {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Дополнительные стили для админ-панели */
+#admin-users-block {
+    min-height: 200px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.admin-user-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.admin-password-input {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    border-radius: var(--input-radius);
+    border: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Дополнительные оптимизации для планшетов */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .tickets-block, .form-block {
+        box-shadow: 0 3px 20px rgba(0,0,0,0.08);
+    }
+    
+    .ticket-item {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .ticket-item:hover {
+        transform: translateY(-2px);
+    }
+    
+    #admin-users-block {
+        min-height: 300px;
+    }
+}
+
+/* Оптимизация для широкоформатных мониторов */
+@media (min-width: 1800px) {
+    .dashboard-wrapper {
+        max-width: 1600px;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+    
+    .tickets-block, .form-block {
+        max-width: 700px;
+    }
+    
+    .col-title {
+        font-size: 30px;
+        margin-bottom: 32px;
+    }
+    
+    body {
+        font-size: 22px;
+    }
+}
+
+/* Оптимизация для устройств с соотношением сторон 16:9 в ландшафтной ориентации */
+@media (min-aspect-ratio: 16/9) and (max-height: 900px) {
+    .dashboard-wrapper {
+        margin: 20px auto;
+    }
+    
+    .tickets-block, .form-block {
+        padding: 25px;
+    }
+}
+
+/* Стили для Touch-устройств */
+@media (hover: none) {
+    .delete-btn:active, .submit-btn:active {
+        transform: scale(0.98);
+    }
+    
+    .ticket-item:active {
+        background: #222 !important;
+    }
+    
+    .autocomplete-item:active {
+        background: #444;
+    }
+}
